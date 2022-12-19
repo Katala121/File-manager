@@ -1,0 +1,20 @@
+{
+  "name": "file-manager",
+  "version": "1.0.0",
+  "description": "This is console application",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Katala121/File-manager.git"
+  },
+  "author": "katala121",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Katala121/File-manager/issues"
+  },
+  "homepage": "https://github.com/Katala121/File-manager#readme"
+}

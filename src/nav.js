@@ -1,7 +1,10 @@
 import { readdir, access } from 'node:fs/promises';
 import { chdir, cwd } from 'node:process';
 import { join } from 'node:path';
-import { homedir } from 'node:os';
+import { homedir, platform } from 'node:os';
+
+const divider = platform() === 'win32' ? '\\' : '/';
+const currentPlatform = platform();
 
 export const printFileList = async () => {
   console.clear();
@@ -16,7 +19,7 @@ export const printFileList = async () => {
 
 export const upDir = async () => {
   try {
-    const newPath = cwd().split('/').slice(0, -1).join('/');
+    const newPath = cwd().split(divider).slice(0, -1).join(divider);
     chdir(newPath);
   } catch (e) {
     throw new Error(e.message);
@@ -25,7 +28,12 @@ export const upDir = async () => {
 
 export const cdDir = async (dir) => {
   try {
-    const newPath = dir.startsWith(homedir().split('/')[1]) ? '/' + dir : join(cwd(), dir);
+    let newPath
+    if ( currentPlatform === 'win32' ) {
+      newPath = dir.startsWith(homedir().split(divider).slice(0, -1).join(divider)) ? dir : join(cwd(), dir);
+    } else {
+      newPath = dir.startsWith(homedir().split(divider)[1]) ? divider + dir : join(cwd(), dir);
+    }
     await access(newPath);
     chdir(newPath);
   } catch (e) {

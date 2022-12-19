@@ -9,8 +9,10 @@ import {
 import { cwd } from 'node:process';
 import { join } from 'node:path';
 import { createReadStream, createWriteStream } from 'node:fs';
+import { platform } from 'node:os';
 
 const FSErrorMessage = 'FS operation failed';
+const divider = platform() === 'win32' ? '\\' : '/';
 
 export const catFile = async (fileName) => {
   try {
@@ -36,10 +38,10 @@ export const addFile = async (fileName) => {
 
 export const renameFile = async (pathToFile, newFilename) => {
   try {
-    const pathToOldFile = pathToFile.includes('/') ? pathToFile : join(cwd(), pathToFile);
-    const arrFromPath = pathToOldFile.split('/');
+    const pathToOldFile = pathToFile.includes(divider) ? pathToFile : join(cwd(), pathToFile);
+    const arrFromPath = pathToOldFile.split(divider);
     arrFromPath[arrFromPath.length - 1] = newFilename;
-    const pathToNewFile = arrFromPath.join('/');
+    const pathToNewFile = arrFromPath.join(divider);
     await access(pathToFile);
     await copyFile(pathToFile, pathToNewFile, constants.COPYFILE_EXCL);
     await rm(pathToFile);
@@ -50,8 +52,8 @@ export const renameFile = async (pathToFile, newFilename) => {
 
 export const cpFile = async (pathToFile, pathToDir) => {
   try {
-    pathToFile = pathToFile.includes('/') ? pathToFile : join(cwd(), pathToFile);
-    const fileName = pathToFile.split('/')[pathToFile.split('/').length - 1];
+    pathToFile = pathToFile.includes(divider) ? pathToFile : join(cwd(), pathToFile);
+    const fileName = pathToFile.split(divider)[pathToFile.split(divider).length - 1];
     const pathToDestinationFile = join(pathToDir, fileName);
     await access(pathToFile);
     await access(pathToDir);
@@ -74,7 +76,7 @@ export const mvFile = async (pathToFile, pathToDir) => {
 
 export const rmFile = async (pathToFile) => {
   try {
-    pathToFile = pathToFile.includes('/') ? pathToFile : join(cwd(), pathToFile);
+    pathToFile = pathToFile.includes(divider) ? pathToFile : join(cwd(), pathToFile);
     await access(pathToFile);
     await rm(pathToFile);
   } catch (e) {

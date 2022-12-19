@@ -17,7 +17,7 @@ const startApp = () => {
   console.log(`You are currently in ${cwd()}`);
 
   const handleInput = async (v) => {
-    const stringValue = v.toString().slice(0,-1);
+    const stringValue = v.toString().split('\n').join('').trim();
     const command = stringValue.split(' ')[0];
     const attribute = stringValue.split(' ')[1] || null;
     const attributes = stringValue.split(' ');

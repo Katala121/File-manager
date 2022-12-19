@@ -3,11 +3,14 @@ import { cwd } from 'node:process';
 import { join } from 'node:path';
 import { createReadStream, createWriteStream } from 'node:fs';
 import { createBrotliCompress, createBrotliDecompress } from 'node:zlib';
+import { platform } from 'node:os';
+
+const divider = platform() === 'win32' ? '\\' : '/';
 
 export const compressFile = async (pathToFile, pathToDest) => {
   try {
-    pathToFile = pathToFile.includes('/') ? pathToFile : join(cwd(), pathToFile);
-    pathToDest = pathToDest.includes('/') ? pathToDest : join(cwd(), pathToDest);
+    pathToFile = pathToFile.includes(divider) ? pathToFile : join(cwd(), pathToFile);
+    pathToDest = pathToDest.includes(divider) ? pathToDest : join(cwd(), pathToDest);
     await access(pathToFile);
     const fileStream = createReadStream(pathToFile);
     const archiveStream = createWriteStream(pathToDest);
@@ -20,8 +23,8 @@ export const compressFile = async (pathToFile, pathToDest) => {
 
 export const decompressFile = async (pathToArchive, pathToDest) => {
   try {
-    pathToArchive = pathToArchive.includes('/') ? pathToArchive : join(cwd(), pathToArchive);
-    pathToDest = pathToDest.includes('/') ? pathToDest : join(cwd(), pathToDest);
+    pathToArchive = pathToArchive.includes(divider) ? pathToArchive : join(cwd(), pathToArchive);
+    pathToDest = pathToDest.includes(divider) ? pathToDest : join(cwd(), pathToDest);
     await access(pathToArchive);
     const archiveStream = createReadStream(pathToArchive);
     const fileStream = createWriteStream(pathToDest);
